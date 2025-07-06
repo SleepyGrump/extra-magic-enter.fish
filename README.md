@@ -1,62 +1,37 @@
-# magic-enter.fish
+# extra-magic-enter.fish
 
-> This plugin makes your enter key magical, by binding commonly used commands to it.
+> Like magic: hit enter to run a default command or accept the currently submitted autosuggestion.
 
-This is a pure Fish implementation of the [Oh My Zsh magic-enter][omz-magic-enter] plugin.
+This is based on the [magic-enter] plugin. Why a new fork instead of a contribution? Entirely new behavior some people might not want. You should be able to go get magic-enter and entirely skip the auto-accept idea.
 
 ## Usage
 
-Press return at an empty Fish prompt and magic-enter will run a default command. For regular directories, magic-enter will run `ls`. For git repositories, it will run `git status -sb`.
+* At an empty Fish prompt, press enter to run a configurable default command.
+  * If you're in a normal directory, the default command is `ls`.
+  * In a git repo, it will run `git status -sb`.
+* At a NON-empty Fish prompt, press enter to accept and run the suggested command.
+* Press alt-enter to clear the current suggestion and instead run the command exactly as you typed it.
+  * This is necessary in the case of commands like `ex` and `exit`. Most of the time, you probably want `exit`, but occasionally you do just want to start up the `ex` editor, and there needs to be a way to do that.
+
+Auto-accept suggestion with the enter key:
 
 ```fish
-$ # change to your Fish dir
-$ cd $__fish_config_dir
-$ # now, just hit enter at an empty prompt, and ls will run
-$
-conf.d/  completions/  functions/  config.fish  fish_variables
-```
-
-Or, if you are in a repo, you'll see the `git status`:
-
-```fish
-$ # assuming you have a dotfiles git project
-$ cd $HOME/.dotfiles
-$ # now hit enter to run `git status -sb`
-$
-## main...origin/main
- M README.md
+$ # The | indicates your cursor:
+$ cd |$HOME/.config
+$ # hit enter to accept the suggestion
+$ /var/home/yourname/.config/
 ```
 
 ## Customization
 
-If you want to configure different magic commands, simply create your own `magic-enter-cmd` function. In the `$__fish_config_dir/functions/magic-enter-cmd.fish` file, you can add something like this:
-
-```fish
-function magic-enter-cmd --description "Customize your own magic-commands"
-    # default magic command
-    set --local my_magic_command 'ls -laF'
-    
-    # git dir magic command
-    if command git rev-parse --is-inside-work-tree &>/dev/null
-        set my_magic_command "ls && git status"
-    end
-    
-    # look for something else, like an .env directory
-    # or whatever other magic commands you need
-    # ...
-    
-    # be sure not to actually run the command
-    # just print it out
-    echo $my_magic_command
-end
-```
+The original [magic-enter][magic-enter] allows you to customize the commands executed when you hit enter. This version offers those customizations still, but makes no changes, so I will leave the documentation to the other plugin. There are no other customization options for this version of the plugin. (You can just edit the source yourself.)
 
 ## Install
 
 [fisher] installation:
 
 ```shell
-fisher install mattmc3/magic-enter.fish
+fisher install sleepygrump/extra-magic-enter.fish
 ```
 
 [fisher]: https://github.com/jorgebucaran/fisher
